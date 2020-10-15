@@ -1,0 +1,104 @@
+version: '3'
+
+networks: 
+  relatom-backend:
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx.dockerfile
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - php
+      - postgres
+    networks:
+      - relatom-backend
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      POSTGRES_DATABASE: homestead
+      POSTGRES_USER: homestead
+      POSTGRES_PASSWORD: secret
+    networks:
+      - relatom-backend
+
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php.dockerfile
+    container_name: php
+    volumes:
+      - ./:/var/www/html:delegated
+    ports:
+      - "9000:9000"
+    networks:
+      - relatom-backend
+
+  composer:
+    build:
+      context: .
+      dockerfile: ./docker/composer.dockerfile
+    container_name: composer
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    networks:
+      - relatom-backend
+    entrypoint: ['composer', '--ignore-platform-reqs']
+
+  npm:
+    image: node:13.7
+    container_name: npm
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - relatom-backend
+    entrypoint: ['npm']
+
+  artisan:
+    build:
+      context: .
+      dockerfile: ./docker/php.dockerfile
+    container_name: artisan
+    volumes:
+      - ./:/var/www/html:delegated
+    depends_on:
+      - postgres
+    working_dir: /var/www/html
+    networks:
+      - relatom-backend
+    entrypoint: ['php', '/var/www/html/artisan']
+    
+  redis:
+    image: "redis:alpine"
+    container_name: redis
+    command: redis-server --requirepass secret
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - relatom-backend
+
+  mail:
+    container_name: fake_mail
+    image: mailhog/mailhog
+    ports:
+      - 8025:8025
+      - 1025:1025
+    networks:
+      - relatom-backend
