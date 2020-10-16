@@ -25,10 +25,10 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
+      - 5432:5432
     environment:
-      POSTGRES_DATABASE: homestead
-      POSTGRES_USER: homestead
+      POSTGRES_DATABASE: relatom
+      POSTGRES_USER: relatom
       POSTGRES_PASSWORD: secret
     networks:
       - relatom-backend
