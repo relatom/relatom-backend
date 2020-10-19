@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Relatom backend api
+  version: '1.0'
+  license:
+    name: AGPL 3.0
+servers:
+  - url: 'http://api.ckcfeins.relatom.test'
+    description: Test server
+paths:
+  /events:
+    get:
+      summary: Get all the events
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                example-1:
+                  value: {}
+      operationId: get-events
+      parameters:
+        - schema:
+            type: string
+          in: query
+          description: ''
+    post:
+      summary: Store an event
+      tags: []
+      responses: {}
+      operationId: store-event
+      description: Create a new event
+      parameters: []
+  '/events/{event}':
+    parameters:
+      - schema:
+          type: string
+        name: event
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: get-events-event
+      description: Get event
+      parameters: []
+components:
+  schemas: {}
+  securitySchemes: {}
