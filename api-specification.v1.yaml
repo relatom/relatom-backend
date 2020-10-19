@@ -15,20 +15,10 @@ paths:
       responses:
         '200':
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties: {}
-              examples:
-                example-1:
-                  value: {}
+          headers: {}
       operationId: get-events
-      parameters:
-        - schema:
-            type: string
-          in: query
-          description: ''
+      parameters: []
+      description: Get all the events
     post:
       summary: Store an event
       tags: []
