@@ -22,10 +22,46 @@ paths:
     post:
       summary: Store an event
       tags: []
-      responses: {}
+      responses:
+        '201':
+          description: Created
       operationId: store-event
       description: Create a new event
       parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                starts_at:
+                  type: string
+                  format: date-time
+                ends_at:
+                  type: string
+                  format: date-time
+                is_all_day:
+                  type: string
+                  default: 'false'
+                notes:
+                  type: string
+              required:
+                - title
+                - starts_at
+                - ends_at
+                - is_all_day
+            examples:
+              example-1:
+                value: |-
+                  {
+                    "title": "Séance d'école de pagaie",
+                    "starts_at": "2019-08-24T14:15:22Z",
+                    "ends_at": "2019-08-24T14:15:22Z",
+                    "is_all_day": true,
+                    "notes": "Petite notes sur l'organisation de l'évènement."
+                  }
   '/events/{event}':
     parameters:
       - schema:

@@ -15,10 +15,11 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')->nullable();
+            $table->boolean('is_all_day')->default(false);
             $table->datetime('starts_at');
             $table->datetime('ends_at');
-            $table->text('notes');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

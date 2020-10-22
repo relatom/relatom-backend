@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Events\StoreRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -26,9 +27,19 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $event = new Event();
+        $event->title = $validated['title'];
+        $event->is_all_day = $validated['is_all_day'];
+        $event->starts_at = $validated['starts_at'];
+        $event->ends_at = $validated['ends_at'];
+        $event->notes = $validated['notes'];
+        $event->save(); 
+
+        return new EventResource($event);
     }
 
     /**
