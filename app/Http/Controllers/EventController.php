@@ -19,9 +19,10 @@ class EventController extends Controller
     {
         $events = Event::startsAfterOrEqualNow()->get();
 
-        return EventResource::collection($events)->collection->groupBy(function ($item, $key) {
-            return substr($item['starts_at'], 0, -9);
-        });
+        return EventResource::collection($events)
+            ->collection->groupBy(function ($item, $key) {
+                return substr($item['starts_at'], 0, -9);
+            });
     }
 
     /**

@@ -22,7 +22,13 @@ class EventFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'title' => 'Séance du ',
+            'is_all_day' => false,
+            'notes' => $this->faker->paragraph($nbSentences = 3, $variableNbSentences = true),
+            'starts_at' => $this->faker->dateTimeBetween($startDate = 'now', $endDate = '+ 15 days', $timezone = null),
+            'ends_at' => function (array $attributes) {
+                return \Carbon\Carbon::instance($attributes['starts_at'])->add('hour', 2);
+            }
         ];
     }
 }
