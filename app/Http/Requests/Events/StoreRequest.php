@@ -24,11 +24,11 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'nullable|string|max:255',
-            'is_all_day' => 'required|boolean',
-            'starts_at' => 'required|date',
-            'ends_at' => 'required|date|after_or_equal:starts_at',
-            'notes' => 'nullable|string',
+            'title' => ['nullable','string','max:255'],
+            'is_all_day' => ['required','boolean'],
+            'starts_at' => ['required','date'],
+            'ends_at' => ['required','date', request('is_all_day') ? 'after_or_equal:starts_at' : 'after:starts_at'],
+            'notes' => ['nullable','string'],
         ];
     }
 }

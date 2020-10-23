@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     use HasFactory;
+
+    public function scopeStartsAfterOrEqualNow($query)
+    {
+        return $query->where('starts_at', '>=', \Carbon\Carbon::today());
+    }
 }

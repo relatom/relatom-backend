@@ -6,6 +6,7 @@ use App\Http\Requests\Events\StoreRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -16,9 +17,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = Event::startsAfterOrEqualNow()->get();
 
-        return EventResource::collection($events);
+        return EventResource::collection($events)->collection->groupBy(function ($item, $key) {
+            return substr($item['starts_at'], 0, -9);
+        });
     }
 
     /**
