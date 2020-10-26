@@ -4,6 +4,10 @@ info:
   version: '1.0'
   license:
     name: AGPL 3.0
+  contact:
+    name: Relatom
+    url: relatom.io
+    email: contact@relatom.io
 servers:
   - url: 'http://api.ckcfeins.relatom.test'
     description: Test server
@@ -52,30 +56,33 @@ paths:
                 - starts_at
                 - ends_at
                 - is_all_day
-            examples:
-              example-1:
-                value: |-
-                  {
-                    "title": "Séance d'école de pagaie",
-                    "starts_at": "2019-08-24T14:15:22Z",
-                    "ends_at": "2019-08-24T14:15:22Z",
-                    "is_all_day": true,
-                    "notes": "Petite notes sur l'organisation de l'évènement."
-                  }
-  '/events/{event}':
+  '/events/{hashid}':
     parameters:
       - schema:
           type: string
-        name: event
+        name: hashid
         in: path
         required: true
     get:
-      summary: Your GET endpoint
-      tags: []
-      responses: {}
+      summary: Show an event by hashid
       operationId: get-events-event
       description: Get event
       parameters: []
+      responses:
+        '200':
+          description: OK
+    put:
+      summary: ''
+      operationId: put-events-hashid
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: ''
+      operationId: delete-events-hashid
+      responses:
+        '204':
+          description: OK
 components:
   schemas: {}
   securitySchemes: {}
