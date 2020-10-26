@@ -15,7 +15,7 @@ class EventResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
+            'id' => $this->hashid(),
             'title' => is_null($this->title) ? '(Sans titre)' : $this->title,
             'is_all_day' => $this->is_all_day,
             'starts_at' => $this->starts_at,
