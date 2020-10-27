@@ -17,7 +17,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::startsAfterOrEqualNow()->get();
+        $events = Event::startsAfterOrEqualNow()->orderBy('starts_at', 'ASC')->get();
 
         return EventResource::collection($events)
             ->collection->groupBy(function ($item, $key) {
