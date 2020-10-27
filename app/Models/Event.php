@@ -16,8 +16,8 @@ class Event extends Model
     	return get_called_class();
     }
 
-    public function scopeStartsAfterOrEqualNow($query)
+    public function scopeStartsAfterOrEqual($query, $start)
     {
-        return $query->where('starts_at', '>=', \Carbon\Carbon::today());
+        return $query->where('starts_at', '>=', $start);
     }
 }

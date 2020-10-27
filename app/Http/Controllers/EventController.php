@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Events\IndexRequest;
 use App\Http\Requests\Events\StoreRequest;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
@@ -15,14 +16,26 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(IndexRequest $request)
     {
-        $events = Event::startsAfterOrEqualNow()->get();
+        $validated = $request->validated();
 
-        return EventResource::collection($events)
+        $limit = isset($validated['limit']) && !is_null($validated['limit']) ? $validated['limit'] : 15;
+        $start = isset($validated['start']) && !is_null($validated['start']) ? $validated['start'] : \Carbon\Carbon::now();
+
+        $events = Event::startsAfterOrEqual($start)->orderBy('starts_at', 'ASC')->limit($limit)->get();
+
+        return [
+            'data' => EventResource::collection($events)
             ->collection->groupBy(function ($item, $key) {
                 return substr($item['starts_at'], 0, -9);
-            });
+            }),
+            'metadata' => [
+                'total' => 20,
+                'current_date' => '2020/03/20',
+                'next_date' => '2020/10/29',
+            ]
+        ];
     }
 
     /**
