@@ -64,9 +64,18 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+    public function update(StoreRequest $request, Event $event)
     {
-        //
+        $validated = $request->validated();
+
+        $event->title = $validated['title'];
+        $event->is_all_day = $validated['is_all_day'];
+        $event->starts_at = $validated['starts_at'];
+        $event->ends_at = $validated['ends_at'];
+        $event->notes = $validated['notes'];
+        $event->save(); 
+
+        return new EventResource($event);
     }
 
     /**
