@@ -9,7 +9,7 @@ info:
     url: relatom.io
     email: contact@relatom.io
 servers:
-  - url: 'http://api.ckcfeins.relatom.test'
+  - url: 'http://localhost'
     description: Test server
 paths:
   /events:
