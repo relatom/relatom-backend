@@ -15,6 +15,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
 	Route::resource('events', EventController::class);
+	Route::get('/events/{event}/comments', [EventController::class, 'getComments']);
+	Route::post('/events/{event}/comments', [EventController::class, 'storeComment']);
+
+
 	Route::resource('members', MemberController::class);
 
 });

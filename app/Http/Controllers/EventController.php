@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Events\StoreRequest;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Illuminate\Http\Request;
@@ -87,5 +88,21 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+    }
+
+    public function getComments(Event $event)
+    {
+        return CommentResource::collection($event->comments()->orderBy('created_at', 'DESC')->get());
+    }
+
+    public function storeComment(Request $request, Event $event)
+    {
+
+        $comment = $event->comments()->create([
+            'message' => $request->message,
+            'user_id' => $request->user()->id
+        ]);
+
+        return new CommentResource($comment); 
     }
 }

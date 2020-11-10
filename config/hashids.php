@@ -47,6 +47,11 @@ return [
             'length' => 6
         ],
 
+        App\Models\Comment::class => [
+            'salt' => \App\Models\Event::class . env('HASHIDS_SALT'),
+            'length' => 6
+        ],
+
     ],
 
 ];

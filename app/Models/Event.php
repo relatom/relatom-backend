@@ -16,6 +16,14 @@ class Event extends Model
     	return get_called_class();
     }
 
+    /**
+     * The roles that belong to the user.
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Models\Comment');
+    }
+
     public function scopeStartsAfterOrEqualNow($query)
     {
         return $query->where('starts_at', '>=', \Carbon\Carbon::today());
