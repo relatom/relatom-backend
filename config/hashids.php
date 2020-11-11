@@ -37,7 +37,7 @@ return [
 
     'connections' => [
 
-         'main' => [
+        'main' => [
             'salt' => env('HASHIDS_SALT'),
             'length' => 6
         ],
@@ -49,6 +49,11 @@ return [
 
         App\Models\Comment::class => [
             'salt' => \App\Models\Event::class . env('HASHIDS_SALT'),
+            'length' => 6
+        ],
+
+        App\Models\User::class => [
+            'salt' => \App\Models\User::class . env('HASHIDS_SALT'),
             'length' => 6
         ],
 

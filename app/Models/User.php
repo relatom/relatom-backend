@@ -2,42 +2,40 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Mtvs\EloquentHashids\HasHashid;
+use Mtvs\EloquentHashids\HashidRouting;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasHashid, HashidRouting, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    public function getHashidsConnection() 
+    {	
+    	return get_called_class();
+    }
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function scopeParents(Builder $builder)
+    {
+    	$builder->whereNull('parent_id');
+    }
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function children() 
+    {
+    	return $this->hasMany(User::class, 'parent_id', 'id');
+    }
+
+    public function getFullnameAttribute()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
+    public function getFullnameShortAttribute()
+    {
+        $firsLetter = substr($this->lastname, 0, 1);
+        return "{$this->firstname} {$firsLetter}.";
+    }
 }
