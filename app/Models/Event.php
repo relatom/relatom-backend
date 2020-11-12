@@ -24,6 +24,11 @@ class Event extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function participants()
+    {
+        return $this->belongsToMany('App\Models\User', 'user_has_event')->withTimestamps();
+    }
+
     public function scopeStartsAfterOrEqualNow($query)
     {
         return $query->where('starts_at', '>=', \Carbon\Carbon::today());

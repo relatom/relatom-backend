@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Events\StoreRequest;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\EventResource;
+use App\Http\Resources\ParticipantResource;
+use App\Http\Resources\ParticipationResource;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -104,5 +107,47 @@ class EventController extends Controller
         ]);
 
         return new CommentResource($comment); 
+    }
+
+    public function getParticipants(Event $event)
+    {
+        return ParticipantResource::collection($event->participants()->orderBy('created_at', 'ASC')->get());
+    }
+
+    public function getParticipations(Request $request, Event $event)
+    {
+        
+        $user = $request->user()->user;
+        // Format user participation 
+        // Trouver s'il à déjà une participation si cas rajouter is_participating == true
+        $user_participation = $event->participants()->where('user_id', $user->id)->first();
+        $user->is_participating = $user_participation != null;
+
+        $result = [$user];
+
+        // Add children if there is
+        $children = $user->children;
+        if(count($children) > 0) {
+            $children_participation = $event->participants()->where('parent_id', $user->id)->get();
+            foreach ($children as $child) {
+                $child->is_participating = false;
+                foreach ($children_participation as $participation) {
+                    if($child->id == $participation->id) {
+                        $child->is_participating = true;
+                    }
+                }
+                array_push($result, $child);
+            }
+        }
+        
+        return ParticipationResource::collection(collect($result));
+    }
+
+    public function storeParticipations(Request $request, Event $event)
+    {
+        $participation = User::findByHashidOrFail($request->id);
+        $event->participants()->toggle([$participation->id]);
+        
+        return ParticipantResource::collection($event->participants()->orderBy('created_at', 'ASC')->get());
     }
 }
