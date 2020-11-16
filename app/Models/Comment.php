@@ -23,7 +23,7 @@ class Comment extends Model
      * @var array
      */
     protected $fillable = [
-        'message', 'user_id', 'event_id'
+        'message', 'member_id', 'event_id'
     ];
 
     /**
@@ -37,8 +37,8 @@ class Comment extends Model
     /**
      * The roles that belong to the user.
      */
-    public function user()
+    public function member()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo('App\Models\Member');
     }
 }

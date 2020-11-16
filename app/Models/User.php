@@ -2,40 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Mtvs\EloquentHashids\HasHashid;
-use Mtvs\EloquentHashids\HashidRouting;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory, HasHashid, HashidRouting, Notifiable;
+    use HasFactory;
 
-    public function getHashidsConnection() 
-    {	
-    	return get_called_class();
-    }
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
 
-    public function scopeParents(Builder $builder)
+    public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    /**
+     * Get the phone record associated with the user.
+     */
+    public function member()
     {
-    	$builder->whereNull('parent_id');
-    }
-
-    public function children() 
-    {
-    	return $this->hasMany(User::class, 'parent_id', 'id');
-    }
-
-    public function getFullnameAttribute()
-    {
-        return "{$this->firstname} {$this->lastname}";
-    }
-
-    public function getFullnameShortAttribute()
-    {
-        $firsLetter = substr($this->lastname, 0, 1);
-        return "{$this->firstname} {$firsLetter}.";
+        return $this->hasOne('App\Models\Member');
     }
 }

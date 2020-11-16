@@ -52,8 +52,8 @@ return [
             'length' => 6
         ],
 
-        App\Models\User::class => [
-            'salt' => \App\Models\User::class . env('HASHIDS_SALT'),
+        App\Models\Member::class => [
+            'salt' => \App\Models\Member::class . env('HASHIDS_SALT'),
             'length' => 6
         ],
 

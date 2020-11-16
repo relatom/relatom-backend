@@ -20,7 +20,7 @@ class CommentResource extends JsonResource
         return [
             'id' => $this->hashid(),
             'message' => $this->message,
-            'created_by' => $this->user->fullname,
+            'created_by' => $this->member->fullname,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

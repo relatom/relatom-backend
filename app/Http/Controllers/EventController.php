@@ -8,7 +8,7 @@ use App\Http\Resources\EventResource;
 use App\Http\Resources\ParticipantResource;
 use App\Http\Resources\ParticipationResource;
 use App\Models\Event;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -103,7 +103,7 @@ class EventController extends Controller
 
         $comment = $event->comments()->create([
             'message' => $request->message,
-            'user_id' => $request->user()->id
+            'member_id' => $request->user()->member->id
         ]);
 
         return new CommentResource($comment); 
@@ -117,18 +117,18 @@ class EventController extends Controller
     public function getParticipations(Request $request, Event $event)
     {
         
-        $user = $request->user()->user;
+        $member = $request->user()->member;
         // Format user participation 
         // Trouver s'il à déjà une participation si cas rajouter is_participating == true
-        $user_participation = $event->participants()->where('user_id', $user->id)->first();
-        $user->is_participating = $user_participation != null;
+        $member_participation = $event->participants()->where('member_id', $member->id)->first();
+        $member->is_participating = $member_participation != null;
 
-        $result = [$user];
+        $result = [$member];
 
         // Add children if there is
-        $children = $user->children;
+        $children = $member->children;
         if(count($children) > 0) {
-            $children_participation = $event->participants()->where('parent_id', $user->id)->get();
+            $children_participation = $event->participants()->where('parent_id', $member->id)->get();
             foreach ($children as $child) {
                 $child->is_participating = false;
                 foreach ($children_participation as $participation) {
@@ -145,7 +145,7 @@ class EventController extends Controller
 
     public function storeParticipations(Request $request, Event $event)
     {
-        $participation = User::findByHashidOrFail($request->id);
+        $participation = Member::findByHashidOrFail($request->id);
         $event->participants()->toggle([$participation->id]);
         
         return ParticipantResource::collection($event->participants()->orderBy('created_at', 'ASC')->get());

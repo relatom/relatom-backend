@@ -26,7 +26,7 @@ class Event extends Model
 
     public function participants()
     {
-        return $this->belongsToMany('App\Models\User', 'user_has_event')->withTimestamps();
+        return $this->belongsToMany('App\Models\Member', 'member_has_event')->withTimestamps();
     }
 
     public function scopeStartsAfterOrEqualNow($query)

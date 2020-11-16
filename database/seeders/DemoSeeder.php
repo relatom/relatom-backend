@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Event;
-use App\Models\User;
+use App\Models\Member;
 use Illuminate\Database\Seeder;
 
 class DemoSeeder extends Seeder
@@ -27,14 +27,14 @@ class DemoSeeder extends Seeder
 		*/ 
 
         // create an admin
-        User::factory()->count(1)->create(['email' => 'admin@gmail.com']);
+        Member::factory()->count(1)->create(['email' => 'admin@gmail.com']);
 
-        $parent = User::factory()
-            ->hasChildren(3, function (array $attributes, User $parent) {
+        $parent = Member::factory()
+            ->hasChildren(3, function (array $attributes, Member $parent) {
                 return [
                     'lastname' => $parent->lastname,
                     'email' => null,
-                    'credential_id' => null];
+                    'user_id' => null];
             })
             ->create(['email' => 'parent@gmail.com']);
 

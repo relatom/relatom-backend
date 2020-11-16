@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
+use App\Http\Resources\MemberResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +27,6 @@ class AuthController extends Controller
 
     public function current(Request $request) 
     {
-        return new UserResource($request->user()->user()->with('children')->first());
+        return new MemberResource($request->user()->member()->with('children')->first());
     }
 }
