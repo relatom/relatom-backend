@@ -27,6 +27,9 @@ class CreateMembersTable extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreign('parent_id')->references('id')->on('members');
 
+            $table->unsignedBigInteger('organization_id');
+            $table->foreign('organization_id')->references('id')->on('organizations');
+
             $table->timestamps();
         });
     }

@@ -20,7 +20,12 @@ class CreateEventsTable extends Migration
             $table->datetime('starts_at');
             $table->datetime('ends_at');
             $table->text('notes')->nullable();
+            $table->unsignedBigInteger('organization_id');
             $table->timestamps();
+
+           
+            $table->foreign('organization_id')->references('id')->on('organizations');
+
         });
     }
 

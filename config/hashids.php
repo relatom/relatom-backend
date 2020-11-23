@@ -42,6 +42,11 @@ return [
             'length' => 6
         ],
 
+        \App\Models\Organization::class => [
+            'salt' => \App\Models\Organization::class . env('HASHIDS_SALT'),
+            'length' => 6
+        ],
+
         \App\Models\Event::class => [
             'salt' => \App\Models\Event::class . env('HASHIDS_SALT'),
             'length' => 6

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Event;
 use App\Models\Member;
+use App\Models\Organization;
 use Illuminate\Database\Seeder;
 
 class DemoSeeder extends Seeder
@@ -15,6 +16,15 @@ class DemoSeeder extends Seeder
      */
     public function run()
     {
+        Organization::factory()
+        ->hasMembers(1, function (array $attributes, Organization $organization) {
+            return ['email' => 'admin@gmail.com'];
+        })
+        ->hasEvents(10)
+        ->create();
+
+
+
         /* 
 			5 utilisateur demo :
 			- un admin 
@@ -26,19 +36,35 @@ class DemoSeeder extends Seeder
 			10 événement + commentaire 
 		*/ 
 
+            /* 
+        Organization::factory()
+            ->has(
+                Post::factory()
+                        ->count(3)
+                        ->state(function (array $attributes, User $user) {
+                            return ['user_type' => $user->type];
+                        })
+            )
+            ->has(
+                Post::factory()
+                        ->count(3)
+                        ->state(function (array $attributes, User $user) {
+                            return ['user_type' => $user->type];
+                        })
+            )
+            ->hasMember(5, function(array $attributes,  ))
+            ->hasEvent()
+            ->create();
+
+*/ 
+
+
         // create an admin
-        Member::factory()->count(1)->create(['email' => 'admin@gmail.com']);
+        /* Member::factory()->count(1)->create(['email' => 'admin@gmail.com']);
 
-        $parent = Member::factory()
-            ->hasChildren(3, function (array $attributes, Member $parent) {
-                return [
-                    'lastname' => $parent->lastname,
-                    'email' => null,
-                    'user_id' => null];
-            })
-            ->create(['email' => 'parent@gmail.com']);
+        
 
-        Event::factory()->count(10)->create();
+        Event::factory()->count(10)->create(); */ 
 
     }
 }

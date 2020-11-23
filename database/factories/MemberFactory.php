@@ -27,9 +27,10 @@ class MemberFactory extends Factory
             'firstname' => $this->faker->firstName,
             'lastname' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
-            'user_id' => function (array $attributes) {
-                return User::factory()->create(['email' => $attributes['email']]);
-            },
         ];
+    }
+
+    public function organization() {
+        $this->belongsTo('App\Models\Organization');
     }
 }
